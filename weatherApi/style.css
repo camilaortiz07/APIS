@@ -1,0 +1,387 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Rajdhani', sans-serif;
+    box-sizing: border-box;
+}
+
+/* Scanline overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.06) 2px,
+        rgba(0, 0, 0, 0.06) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+}
+
+body {
+    background-image:
+        linear-gradient(
+            rgba(0, 10, 30, 0.75),
+            rgba(0, 20, 10, 0.75)
+        ),
+        url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1600&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Grid floor */
+body::after {
+    content: '';
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%; height: 40%;
+    background-image:
+        linear-gradient(rgba(0, 255, 180, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 180, 255, 0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+    transform: perspective(500px) rotateX(60deg);
+    transform-origin: bottom;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.card {
+    width: 90%;
+    max-width: 420px;
+    background: rgba(0, 15, 30, 0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 220, 255, 0.4);
+    color: #fff;
+    border-radius: 4px 20px 4px 20px;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    box-shadow:
+        0 0 0 1px rgba(0, 255, 180, 0.08),
+        0 0 30px rgba(0, 180, 255, 0.2),
+        0 0 80px rgba(0, 255, 120, 0.08),
+        inset 0 0 30px rgba(0, 80, 100, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+/* ── LOGO SAMURAI — MARCA DE AGUA ── */
+.card-watermark {
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
+    width: 180px;
+    height: 180px;
+    background-image: url('https://static.wikia.nocookie.net/cyberpunk/images/2/23/CP2077_Samurai_Logo.jpeg/revision/latest?cb=20210425144838');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.12;
+    filter: sepia(1) saturate(4) hue-rotate(160deg) brightness(0.8) contrast(3);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Todo el contenido encima de la marca de agua */
+.card > *:not(.card-watermark) {
+    position: relative;
+    z-index: 1;
+}
+
+/* Top slash — cyan */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -10%;
+    width: 120%; height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(0, 200, 255, 0.8) 30%,
+        rgba(0, 255, 180, 1) 50%,
+        rgba(0, 200, 255, 0.8) 70%,
+        transparent 100%
+    );
+    box-shadow: 0 0 10px rgba(0, 220, 255, 0.8), 0 0 20px rgba(0, 255, 150, 0.4);
+    animation: slashPulse 3s ease-in-out infinite;
+    z-index: 2;
+}
+
+/* Bottom slash */
+.card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: -10%;
+    width: 120%; height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(0, 180, 100, 0.6) 40%,
+        rgba(0, 255, 180, 0.9) 50%,
+        rgba(0, 180, 100, 0.6) 60%,
+        transparent 100%
+    );
+    box-shadow: 0 0 8px rgba(0, 200, 150, 0.6);
+    z-index: 2;
+}
+
+@keyframes slashPulse {
+    0%, 100% { opacity: 0.7; transform: scaleX(0.95); }
+    50% { opacity: 1; transform: scaleX(1.02); }
+}
+
+.card:hover {
+    transform: translateY(-6px) skewX(-0.5deg);
+    box-shadow:
+        0 0 0 1px rgba(0, 220, 255, 0.3),
+        0 0 40px rgba(0, 200, 255, 0.3),
+        0 0 100px rgba(0, 255, 150, 0.1),
+        inset 0 0 40px rgba(0, 80, 120, 0.15);
+}
+
+/* ── SEARCH BAR ── */
+.search {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 255, 180, 0.03);
+    border: 1px solid rgba(0, 200, 255, 0.3);
+    border-radius: 2px 12px 2px 12px;
+    padding: 5px 5px 5px 20px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.search:focus-within {
+    background: rgba(0, 180, 255, 0.07);
+    border-color: rgba(0, 255, 180, 0.7);
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.2), inset 0 0 10px rgba(0, 100, 80, 0.1);
+}
+
+.search input {
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #c0f0ff;
+    height: 50px;
+    flex: 1;
+    font-size: 16px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding-left: 10px;
+}
+
+.search input::placeholder {
+    color: rgba(0, 200, 255, 0.35);
+    font-style: italic;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.search button {
+    border: 0;
+    outline: 0;
+    background: linear-gradient(135deg, #004466 0%, #006699 50%, #00ccff 100%);
+    border-radius: 2px 10px 2px 10px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 180, 255, 0.4);
+}
+
+.search button::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(0, 255, 200, 0.3) 50%,
+        transparent 70%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+}
+
+.search button:hover::before {
+    transform: translateX(100%);
+}
+
+.search button:hover {
+    background: linear-gradient(135deg, #006699 0%, #00aadd 50%, #00ffcc 100%);
+    transform: scale(1.08) skewX(-2deg);
+    box-shadow: 0 0 25px rgba(0, 220, 255, 0.6), 0 0 50px rgba(0, 255, 150, 0.3);
+}
+
+.search button img {
+    width: 20px;
+    filter: brightness(0) invert(1);
+    position: relative;
+    z-index: 1;
+}
+
+/* ── WEATHER ICON ── */
+.weather-icon {
+    width: 150px;
+    margin-top: 30px;
+    filter:
+        drop-shadow(0 0 10px rgba(0, 200, 255, 0.6))
+        drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5))
+        saturate(0.8)
+        hue-rotate(180deg);
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%   { transform: translateY(0px) rotate(0deg); }
+    25%  { transform: translateY(-6px) rotate(-0.5deg); }
+    50%  { transform: translateY(-12px) rotate(0deg); }
+    75%  { transform: translateY(-6px) rotate(0.5deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+/* ── TEMPERATURE ── */
+.weather h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: 72px;
+    font-weight: 900;
+    margin-top: 10px;
+    background: linear-gradient(to bottom, #00ffcc 0%, #00aaff 50%, #0044aa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -2px;
+    animation: glitchText 6s infinite;
+}
+
+@keyframes glitchText {
+    0%, 92%, 100% { transform: translate(0); filter: none; }
+    93% { transform: translate(-2px, 0); filter: hue-rotate(90deg); }
+    94% { transform: translate(2px, 0); filter: hue-rotate(-90deg); }
+    95% { transform: translate(0); filter: none; }
+    96% { transform: translate(-1px, 1px); }
+    97% { transform: translate(0); }
+}
+
+.weather h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    margin-top: -5px;
+    color: rgba(0, 200, 180, 0.8);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+/* ── DETAILS ── */
+.details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 40px;
+    background: rgba(0, 50, 80, 0.2);
+    border: 1px solid rgba(0, 180, 200, 0.2);
+    padding: 20px;
+    border-radius: 2px 12px 2px 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.details::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 220, 255, 0.5), transparent);
+}
+
+.col {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.col img {
+    width: 32px;
+    margin-right: 12px;
+    filter: opacity(0.9) sepia(1) saturate(5) hue-rotate(160deg);
+}
+
+.humidity, .wind {
+    font-family: 'Orbitron', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    display: block;
+    color: #00ffcc;
+    text-shadow: 0 0 8px rgba(0, 220, 255, 0.6);
+    letter-spacing: 1px;
+}
+
+.col p:last-child {
+    font-size: 11px;
+    color: rgba(0, 180, 200, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+}
+
+/* ── WEATHER SECTION ── */
+.weather {
+    display: none;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.97) translateY(8px);
+        filter: brightness(2) blur(2px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: brightness(1) blur(0);
+    }
+}
+
+/* ── ERROR ── */
+.error {
+    text-align: center;
+    color: #00ffcc;
+    font-size: 13px;
+    margin-top: 15px;
+    display: none;
+    background: rgba(0, 100, 80, 0.12);
+    border: 1px solid rgba(0, 200, 180, 0.3);
+    padding: 12px 16px;
+    border-radius: 2px 8px 2px 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(0, 220, 255, 0.4);
+}
